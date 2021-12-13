@@ -1,80 +1,62 @@
+//import React from 'react';
 import React from 'react';
-import {ActivityIndicator, Button, FlatList, StyleSheet, Text, View,Dimensions} from 'react-native';
+import {ActivityIndicator, Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import ProductItem from "./ProductItem";
 
 const win = Dimensions.get('window');
 
-const imageWidth = win.width*0.40
+const imageWidth = win.width * 0.40
 
-const imageHeight = imageWidth*1.50
-
-import {Card, Image} from 'react-native-elements'
-
-import productItems from '../mocks/products';
-
-const getFakeProductList = () => {
-    return fetch('https://fakestoreapi.com/products')
-        .then(response=>response.json())
-        .then(json=>console.log("my json list : "+json))
-        .catch((error) => {
-            console.error(error);
-        });
-};
-
-class ProductListItem extends React.Component {
-
-    render() {
-        const {product} = this.props;
-
-        return <Card containerStyle={{padding: 10, borderRadius: 12}}>
-
-
-            <Image
-                source={{uri: product.image}}
-                style={{width: imageWidth, height: imageHeight}}
-                PlaceholderContent={<ActivityIndicator/>}
-            />
-
-            <View onTouchEnd={() => this.props.onPressItem()}
-                  style={{justifyContent: 'flex-start', flex: 1}}>
-
-                <Text style={{fontSize: 18}}>{product.title}</Text>
-
-            </View>
-
-            <View style={{flexDirection: 'row'}}>
-                <View style={{marginRight: 5}}>
-                    <Button title='+ADD'
-                            style={{fontSize: 18}}
-                            color='green'
-                            disabled={product.count === 10}
-                            onPress={() => this.props.onPressAdd()}/>
-                </View>
-                <View style={{alignItems: 'center', marginVertical: 5, marginRight: 5}}>
-                    <Text style={{fontSize: 18,}}>{product.count}</Text>
-                </View>
-                <Button
-                    title='-REMOVE'
-                    style={{fontSize: 18}}
-                    color='darkorange'
-                    disabled={!product.count}
-                    onPress={() => this.props.onPressRemove()}/>
-            </View>
-
-        </Card>;
-    }
-}
+const imageHeight = imageWidth * 1.50
 
 
 export default class ProductListScreen extends React.Component {
+
     static navigationOptions = {
         title: 'Product List',
     };
 
-    state = {
-        products: productItems
+
+    goForFetch = () => {
+        console.log(this.state.offset);
+        this.setState({
+            fromFetch: true,
+            loading: true,
+
+        })
+
+        fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
+            .then(response => response.json())
+            .then((responseJson) => {
+                console.log('getting data from fetch', responseJson)
+                setTimeout(() => {
+                    this.setState({
+                        loading: false,
+                        dataSource: responseJson,
+                        offset: this.state.offset + 1
+                    })
+                }, 10)
+
+            })
+            .catch(error => console.log(error))
+
     }
 
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            dataSource: [],
+            offset: 1
+        };
+    }
+
+
+    componentDidMount() {
+
+        this.goForFetch();
+    }
 
     updateItemCount(selectedItem, type) {
         this.state.products.forEach((item) => {
@@ -115,21 +97,27 @@ export default class ProductListScreen extends React.Component {
 
 
     render() {
-
+        const {dataSource, fromFetch, fromAxios, loading, axiosData} = this.state
 
         return (
             <View style={styles.container}>
 
-
                 <FlatList
-                    data={this.state.products}
-                    renderItem={({item}) => <ProductListItem product={item}
-                                                             onPressItem={() => this.navigateProductDetail(item)}
-                                                             onPressAdd={() => this.handlePressAdd(item)}
-                                                             onPressRemove={() => this.handlePressRemove(item)}/>}
+                    data={dataSource}
+                    renderItem={({item}) => <ProductItem product={item}
+                                                         onPressItem={() => this.navigateProductDetail(item)}
+                                                         onPressAdd={() => this.handlePressAdd(item)}
+                                                         onPressRemove={() => this.handlePressRemove(item)}/>}
                     keyExtractor={item => item.id.toString()}
+                    onEndReached={this.goForFetch}
+                    onEndReachedThreshold={1}
                 />
 
+                {loading &&
+                <View>
+                    <ActivityIndicator size="large" color="#0c9"/>
+                </View>
+                }
             </View>
         )
     }
