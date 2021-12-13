@@ -18,28 +18,35 @@ export default class ProductListScreen extends React.Component {
 
 
     goForFetch = () => {
+
+
         console.log(this.state.offset);
-        this.setState({
-            fromFetch: true,
-            loading: true,
 
-        })
+        if (!this.state.listEnded) {
 
-        fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
-            .then(response => response.json())
-            .then((responseJson) => {
-                console.log('getting data from fetch', responseJson)
-                setTimeout(() => {
-                    this.setState({
-                        loading: false,
-                        dataSource: responseJson,
-                        offset: this.state.offset + 1
-                    })
-                }, 10)
-
+            this.setState({
+                fromFetch: true,
+                loading: true,
+                listEnded: false,
             })
-            .catch(error => console.log(error))
 
+            fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
+                .then(response => response.json())
+                .then((responseJson) => {
+                    setTimeout(() => {
+                        this.setState({
+                            loading: false,
+                            dataSource: [...this.state.dataSource, ...responseJson],
+                            offset: this.state.offset + 1,
+                            listEnded: this.state.offset === 10
+                        })
+                    }, 10)
+
+                })
+                .catch(error => console.log(error))
+        } else {
+            console.log('All records loaded')
+        }
     }
 
 
@@ -108,7 +115,7 @@ export default class ProductListScreen extends React.Component {
                                                          onPressItem={() => this.navigateProductDetail(item)}
                                                          onPressAdd={() => this.handlePressAdd(item)}
                                                          onPressRemove={() => this.handlePressRemove(item)}/>}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={(item, index) => index.toString()}
                     onEndReached={this.goForFetch}
                     onEndReachedThreshold={1}
                 />
