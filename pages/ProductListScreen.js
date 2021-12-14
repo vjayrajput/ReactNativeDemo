@@ -9,7 +9,6 @@ export default class ProductListScreen extends React.Component {
 
     goForFetch = () => {
 
-
         console.log(this.state.offset);
 
         if (!this.state.listEnded) {
@@ -43,7 +42,7 @@ export default class ProductListScreen extends React.Component {
         } else {
             console.log('All records loaded')
         }
-    }
+    };
 
     constructor(props) {
         super(props);

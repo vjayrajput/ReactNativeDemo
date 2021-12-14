@@ -4,9 +4,9 @@ import {Card, Icon, Image} from 'react-native-elements'
 
 const win = Dimensions.get('window');
 
-const imageWidth = win.width * 0.20
+const imageWidth = win.width * 0.20;
 
-const imageHeight = imageWidth * 1.60
+const imageHeight = imageWidth * 1.60;
 
 export default class ProductItem extends React.Component {
 
