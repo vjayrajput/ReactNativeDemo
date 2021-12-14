@@ -87,14 +87,6 @@ export default class ProductListScreen extends React.Component {
         this.updateItemCount(selectedItem, 'dec');
     }
 
-    navigateProductDetail(item) {
-
-        const {navigate} = this.props.navigation;
-
-        // navigate('ProductDetail', { product: item});
-
-    }
-
     getBasketItems() {
         return this.state.products.filter(item => item.count);
     }
@@ -117,9 +109,8 @@ export default class ProductListScreen extends React.Component {
                     extraData={this.state}
                     renderItem={({item, index}) => <ProductItem product={item}
                                                                 onPressFavorite={() => this.handlePressFavorite(item, index)}
-                                                         onPressItem={() => this.navigateProductDetail(item)}
-                                                         onPressAdd={() => this.handlePressAdd(item)}
-                                                         onPressRemove={() => this.handlePressRemove(item)}/>}
+                                                                onPressAdd={() => this.handlePressAdd(item)}
+                                                                onPressRemove={() => this.handlePressRemove(item)}/>}
                     keyExtractor={(item, index) => index.toString()}
                     onEndReached={this.goForFetch}
                     onEndReachedThreshold={1}
