@@ -51,30 +51,56 @@ export default class ProductItem extends React.Component {
                     name={product.isSelected ? 'heart' : 'heart-o'}
                     type='font-awesome'
                     size={28}
-                    color='#000'
+                    color={product.isSelected ? '#F00' : '#000'}
                     onPress={() => this.props.onPressFavorite()}
                 />
             </View>
 
-            <View style={{flexDirection: 'row'}}>
-                <View style={{marginRight: 5}}>
-                    <Button title='+ADD'
+
+            {product.count === 0 ?
+                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <Button title='ADD'
                             style={{fontSize: 18}}
                             color='green'
                             disabled={product.count === 10}
                             onPress={() => this.props.onPressAdd()}/>
                 </View>
-                <View style={{alignItems: 'center', marginVertical: 5, marginRight: 5}}>
-                    <Text style={{fontSize: 18,}}>{product.count}</Text>
-                </View>
-                <Button
-                    title='-REMOVE'
-                    style={{fontSize: 18}}
-                    color='darkorange'
-                    disabled={!product.count}
-                    onPress={() => this.props.onPressRemove()}/>
-            </View>
+                :
+                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    
+                    <Icon
+                        style={{position: 'absolute', top: 5, right: 5, marginStart: 4}}
+                        name={product.count === 10 ? 'plus-square-o' : 'plus-square'}
+                        type='font-awesome'
+                        size={32}
+                        color={product.count === 10 ? 'grey' : 'green'}
+                        onPress={() => {
+                            if (product.count < 10) {
+                                this.props.onPressAdd()
+                            }
+                        }
+                        }
+                    />
+                    <View style={{alignItems: 'center', marginVertical: 5, marginRight: 8, marginStart: 8}}>
+                        <Text style={{fontSize: 18,}}>{product.count}</Text>
+                    </View>
 
+                    <Icon
+                        style={{position: 'absolute', top: 5, right: 5, marginStart: 4}}
+                        name={product.count === 0 ? 'minus-square-o' : 'minus-square'}
+                        type='font-awesome'
+                        size={32}
+                        color={product.count === 0 ? 'grey' : 'green'}
+                        onPress={() => {
+                            if (product.count > 0) {
+                                this.props.onPressRemove()
+                            }
+                        }
+                        }
+                    />
+                </View>
+
+            }
 
         </Card>;
     }

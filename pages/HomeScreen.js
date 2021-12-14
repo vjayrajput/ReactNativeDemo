@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-    Button,
-} from 'react-native';
-import ProductListScreen from "./ProductListScreen";
+import {Button,} from 'react-native';
 
 export default class HomeScreen extends React.Component {
 
@@ -15,7 +12,7 @@ export default class HomeScreen extends React.Component {
 
         return (
             <Button
-                title="START APP"
+                title="Product List"
                 onPress={() => navigate('ProductList')}
             />
         );

@@ -23,13 +23,10 @@ export default class ProductListScreen extends React.Component {
                 .then(response => response.json())
                 .then((responseJson) => {
                     responseJson.map((productItem, index) => {
-                        //TODO this is dummy product id
+                        //TODO this is dummy product id and count
                         productItem.id = this.state.dataSource.length + index + 1
                         productItem.isSelected = false
-                        // //TODO this is dummy condition for show default selected value
-                        // if (index === 1) {
-                        //     productItem.isSelected = true
-                        // }
+                        productItem.count = 0
                         return productItem
                     });
                     setTimeout(() => {
@@ -62,41 +59,50 @@ export default class ProductListScreen extends React.Component {
         this.goForFetch();
     }
 
-    updateItemCount(selectedItem, type) {
-        this.state.products.forEach((item) => {
-
-            if (selectedItem.id === item.id) {
-                if (type === "inc") {
-                    item.count++;
-                } else if (item.count !== 0) {
-                    item.count--;
-                }
-            }
 
 
-        });
-
-        this.setState({products: this.state.products});
-    }
-
-    handlePressAdd(selectedItem) {
-        this.updateItemCount(selectedItem, 'inc');
-    }
-
-    handlePressRemove(selectedItem) {
-        this.updateItemCount(selectedItem, 'dec');
-    }
 
     getBasketItems() {
         return this.state.products.filter(item => item.count);
     }
 
-    handlePressFavorite(selectedItem, index) {
+    handlePressFavorite(selectedItem) {
         console.log("handlePressFavorite");
-
-        this.state.dataSource[index].isSelected = !selectedItem.isSelected;
+        selectedItem.isSelected = !selectedItem.isSelected;
         this.setState({dataSource: this.state.dataSource});
     }
+
+    handlePressAdd(selectedItem, index) {
+        console.log("handlePressAdd");
+        this.updateItemCount(selectedItem, index, 'inc');
+    }
+
+    handlePressRemove(selectedItem, index) {
+        console.log("handlePressRemove");
+        this.updateItemCount(selectedItem, index, 'dec');
+    }
+
+    updateItemCount(selectedItem, index, type) {
+        if (type === "inc") {
+            selectedItem.count++;
+        } else if (selectedItem.count !== 0) {
+            selectedItem.count--;
+        }
+        // this.state.products.forEach((item) => {
+        //
+        //     if (selectedItem.id === item.id) {
+        //         if (type === "inc") {
+        //             item.count++;
+        //         } else if (item.count !== 0) {
+        //             item.count--;
+        //         }
+        //     }
+        //
+        // });
+
+        this.setState({dataSource: this.state.dataSource});
+    }
+
 
     render() {
         const {dataSource, loading} = this.state
@@ -106,11 +112,10 @@ export default class ProductListScreen extends React.Component {
 
                 <FlatList
                     data={dataSource}
-                    extraData={this.state}
                     renderItem={({item, index}) => <ProductItem product={item}
-                                                                onPressFavorite={() => this.handlePressFavorite(item, index)}
-                                                                onPressAdd={() => this.handlePressAdd(item)}
-                                                                onPressRemove={() => this.handlePressRemove(item)}/>}
+                                                                onPressFavorite={() => this.handlePressFavorite(item)}
+                                                                onPressAdd={() => this.handlePressAdd(item, index)}
+                                                                onPressRemove={() => this.handlePressRemove(item, index)}/>}
                     keyExtractor={(item, index) => index.toString()}
                     onEndReached={this.goForFetch}
                     onEndReachedThreshold={1}
