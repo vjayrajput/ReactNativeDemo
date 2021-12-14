@@ -1,21 +1,10 @@
-//import React from 'react';
 import React from 'react';
-import {ActivityIndicator, Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+
 import ProductItem from "./ProductItem";
-
-const win = Dimensions.get('window');
-
-const imageWidth = win.width * 0.40
-
-const imageHeight = imageWidth * 1.50
 
 
 export default class ProductListScreen extends React.Component {
-
-    static navigationOptions = {
-        title: 'Product List',
-    };
-
 
     goForFetch = () => {
 
@@ -33,12 +22,22 @@ export default class ProductListScreen extends React.Component {
             fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
                 .then(response => response.json())
                 .then((responseJson) => {
+                    responseJson.map((productItem, index) => {
+                        //TODO this is dummy product id
+                        productItem.id = this.state.dataSource.length + index + 1
+                        productItem.isSelected = false
+                        // //TODO this is dummy condition for show default selected value
+                        // if (index === 1) {
+                        //     productItem.isSelected = true
+                        // }
+                        return productItem
+                    });
                     setTimeout(() => {
                         this.setState({
                             loading: false,
                             dataSource: [...this.state.dataSource, ...responseJson],
                             offset: this.state.offset + 1,
-                            listEnded: this.state.offset === 10
+                            listEnded: this.state.offset === 5//TODO this is dummy condition for pagination
                         })
                     }, 10)
 
@@ -49,7 +48,6 @@ export default class ProductListScreen extends React.Component {
         }
     }
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -58,7 +56,6 @@ export default class ProductListScreen extends React.Component {
             offset: 1
         };
     }
-
 
     componentDidMount() {
 
@@ -102,16 +99,24 @@ export default class ProductListScreen extends React.Component {
         return this.state.products.filter(item => item.count);
     }
 
+    handlePressFavorite(selectedItem, index) {
+        console.log("handlePressFavorite");
+
+        this.state.dataSource[index].isSelected = !selectedItem.isSelected;
+        this.setState({dataSource: this.state.dataSource});
+    }
 
     render() {
-        const {dataSource, fromFetch, fromAxios, loading, axiosData} = this.state
+        const {dataSource, loading} = this.state
 
         return (
             <View style={styles.container}>
 
                 <FlatList
                     data={dataSource}
-                    renderItem={({item}) => <ProductItem product={item}
+                    extraData={this.state}
+                    renderItem={({item, index}) => <ProductItem product={item}
+                                                                onPressFavorite={() => this.handlePressFavorite(item, index)}
                                                          onPressItem={() => this.navigateProductDetail(item)}
                                                          onPressAdd={() => this.handlePressAdd(item)}
                                                          onPressRemove={() => this.handlePressRemove(item)}/>}
