@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -25,7 +17,7 @@ const App = () => {
                 <Stack.Screen
                     name="Home"
                     component={Home}
-                    options={{title: 'Welcome'}}
+                    options={{title: 'Home'}}
                 />
 
                 <Stack.Screen name="ProductList" component={ProductList}/>

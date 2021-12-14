@@ -58,7 +58,7 @@ export default class ProductItem extends React.Component {
 
 
             {product.count === 0 ?
-                <View style={{width: 100, backgroundColor: 'blue'}}>
+                <View style={{width: 100}}>
                     <Button title='ADD'
                             style={{fontSize: 18}}
                             color='green'
@@ -106,45 +106,50 @@ export default class ProductItem extends React.Component {
     }
 }
 
-
 const styles = StyleSheet.create({
     cardContainer: {
         margin: 5, borderRadius: 12
     },
-    title: {
-        textAlign: 'center',
-        marginVertical: 15,
-        fontSize: 20,
-        borderBottomWidth: 2,
-        paddingBottom: 15
-
-    },
-    ListItems: {
-        height: '80%',
-        flexDirection: "row",
-        marginHorizontal: 16,
-
-    },
-    Item: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        borderBottomWidth: 0.5,
-        paddingBottom: 5,
-        paddingTop: 5
-    },
-    StatusBar: {
-        height: "100%",
-        backgroundColor: 'red',
-        padding: 15
-    },
-    heartIcon: {
-        ...StyleSheet.absoluteFillObject,
-        alignSelf: 'flex-end',
-        marginTop: -5,
-        position: 'absolute', // add if dont work with above
-    }
-
 });
+
+// const styles = StyleSheet.create({
+//     cardContainer: {
+//         margin: 5, borderRadius: 12
+//     },
+//     title: {
+//         textAlign: 'center',
+//         marginVertical: 15,
+//         fontSize: 20,
+//         borderBottomWidth: 2,
+//         paddingBottom: 15
+//
+//     },
+//     ListItems: {
+//         height: '80%',
+//         flexDirection: "row",
+//         marginHorizontal: 16,
+//
+//     },
+//     Item: {
+//         flex: 1,
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         justifyContent: 'space-between',
+//         marginBottom: 10,
+//         borderBottomWidth: 0.5,
+//         paddingBottom: 5,
+//         paddingTop: 5
+//     },
+//     StatusBar: {
+//         height: "100%",
+//         backgroundColor: 'red',
+//         padding: 15
+//     },
+//     heartIcon: {
+//         ...StyleSheet.absoluteFillObject,
+//         alignSelf: 'flex-end',
+//         marginTop: -5,
+//         position: 'absolute', // add if dont work with above
+//     }
+//
+// });
