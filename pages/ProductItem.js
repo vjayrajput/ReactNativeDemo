@@ -15,39 +15,25 @@ export default class ProductItem extends React.Component {
 
         return <Card style={styles.cardContainer}>
 
+            <View style={styles.contentView}>
 
-            <View
-                style={{
-                    flexDirection: "row",
-                    padding: 4
-                }}
-            >
                 <Image
                     source={{uri: product.image}}
-                    style={{width: imageWidth, height: imageHeight}}
+                    style={styles.imageView}
                     PlaceholderContent={<ActivityIndicator/>}
                 />
 
-                <View
-                    style={{
-                        flex: 1,
-                        paddingStart: 16,
-                    }}
-                >
+                <View style={styles.textContentView}>
 
-                    <Text style={{
-                        fontSize: 16,
-                        fontWeight: "bold"
-                    }}>{product.title}</Text>
-                    <Text style={{
-                        fontSize: 14,
-                    }}>₹{product.price}</Text>
-                    <Text style={{
-                        fontSize: 12,
-                    }}>{product.description}</Text>
+                    <Text style={styles.titleView}>{product.title}</Text>
+
+                    <Text style={styles.priceView}>₹{product.price}</Text>
+
+                    <Text style={styles.descriptionView}>{product.description}</Text>
+
                 </View>
+
                 <Icon
-                    style={{position: 'absolute', top: 5, right: 5, marginStart: 4}}
                     name={product.isSelected ? 'heart' : 'heart-o'}
                     type='font-awesome'
                     size={28}
@@ -110,6 +96,29 @@ const styles = StyleSheet.create({
     cardContainer: {
         margin: 5, borderRadius: 12
     },
+    contentView: {
+        flexDirection: "row",
+        padding: 4
+    },
+    imageView: {
+        width: imageWidth, height: imageHeight
+    },
+    textContentView: {
+        flex: 1
+    },
+    titleView: {
+        fontSize: 16,
+        marginStart: 16,
+        fontWeight: "bold"
+    },
+    priceView: {
+        fontSize: 14,
+        marginStart: 16
+    },
+    descriptionView: {
+        fontSize: 12,
+        marginStart: 16
+    }
 });
 
 // const styles = StyleSheet.create({
