@@ -17,16 +17,18 @@ export default class ProductListScreen extends React.Component {
                 fromFetch: true,
                 loading: true,
                 listEnded: false
-            })
+            });
 
             fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
                 .then(response => response.json())
                 .then((responseJson) => {
                     responseJson.map((productItem, index) => {
-                        //TODO this is dummy product id and count
-                        productItem.id = this.state.dataSource.length + index + 1
-                        productItem.isSelected = false
-                        productItem.count = 0
+                        /**
+                         * this is dummy product id and count
+                         */
+                        productItem.id = this.state.dataSource.length + index + 1;
+                        productItem.isSelected = false;
+                        productItem.count = 0;
                         return productItem
                     });
                     setTimeout(() => {
@@ -34,7 +36,7 @@ export default class ProductListScreen extends React.Component {
                             loading: false,
                             dataSource: [...this.state.dataSource, ...responseJson],
                             offset: this.state.offset + 1,
-                            listEnded: this.state.offset === 5//TODO this is dummy condition for pagination
+                            listEnded: this.state.offset === 5//this is dummy condition for pagination end
                         })
                     }, 10)
                 })
@@ -90,7 +92,7 @@ export default class ProductListScreen extends React.Component {
         let items = 0;
         let prices = 0;
 
-        this.state.dataSource.filter(product => product.count != 0).map(filteredProduct => {
+        this.state.dataSource.filter(product => product.count !== 0).map(filteredProduct => {
             items = items + filteredProduct.count;
             prices = prices + (filteredProduct.count * filteredProduct.price);
         });
@@ -102,15 +104,13 @@ export default class ProductListScreen extends React.Component {
     }
 
     render() {
-        const {dataSource, loading} = this.state
-
         return (
             <View style={styles.container}>
 
                 {
                     this.state.dataSource.length > 0 ?
                         <FlatList
-                            data={dataSource}
+                            data={this.state.dataSource}
                             renderItem={({item, index}) => <ProductItem product={item}
                                                                         onPressFavorite={() => this.handlePressFavorite(item)}
                                                                         onPressAdd={() => this.handlePressAdd(item, index)}
@@ -122,7 +122,7 @@ export default class ProductListScreen extends React.Component {
                         : null
                 }
 
-                {loading ?
+                {this.state.loading ?
                     <View>
                         <ActivityIndicator size="large" color="#0c9"/>
                     </View> : null
