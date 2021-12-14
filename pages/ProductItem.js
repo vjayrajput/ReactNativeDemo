@@ -105,15 +105,18 @@ const styles = StyleSheet.create({
     titleView: {
         fontSize: 16,
         marginStart: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: 'black'
     },
     priceView: {
         fontSize: 14,
-        marginStart: 16
+        marginStart: 16,
+        color: 'black'
     },
     descriptionView: {
         fontSize: 12,
-        marginStart: 16
+        marginStart: 16,
+        color: 'black'
     },
     addButtonView: {
         width: 100
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
     itemCount: {
         fontSize: 18,
         marginStart: 10,
-        marginEnd: 10
+        marginEnd: 10,
+        color: 'black'
     }
 });
