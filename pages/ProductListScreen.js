@@ -123,49 +123,24 @@ export default class ProductListScreen extends React.Component {
                 }
 
                 {loading ?
-                    <View style={{
-                        backgroundColor: '#00000000'
-                    }}>
-                    <ActivityIndicator size="large" color="#0c9"/>
+                    <View>
+                        <ActivityIndicator size="large" color="#0c9"/>
                     </View> : null
                 }
 
-
-                {this.state.totalItem !== 0 ? <View
-                    style={{
-                        flexDirection: "row",
-                        padding: 8,
-                        backgroundColor: 'lightslategrey',
-                        margin: 16,
-                        borderRadius: 4
-                    }}
-                >
+                {this.state.totalItem !== 0 ? <View style={styles.cartView}>
                     <Icon
-                        style={{top: 5, right: 5, marginStart: 4}}
+                        style={styles.cartIcon}
                         name='cart-plus'
                         type='font-awesome'
                         size={28}
                         color='#FFF'
                     />
-                    <View
-                        style={{
-                            flex: 1,
-                            paddingStart: 8,
-                        }}
-                    >
-
-                        <Text style={{
-                            fontSize: 16,
-                            fontWeight: "bold",
-                            color: 'white'
-                        }}>{this.state.totalItem} Items</Text>
-                        <Text style={{
-                            fontSize: 14,
-                            color: 'white'
-                        }}>Total : ₹{this.state.totalPrice.toFixed(2)}</Text>
+                    <View>
+                        <Text style={styles.itemText}>Items : {this.state.totalItem}</Text>
+                        <Text style={styles.priceText}>Total : ₹{this.state.totalPrice.toFixed(2)}</Text>
                     </View>
                 </View> : null}
-
 
 
             </View>
@@ -173,40 +148,29 @@ export default class ProductListScreen extends React.Component {
     }
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
     },
-    title: {
-        textAlign: 'center',
-        marginVertical: 15,
-        fontSize: 20,
-        borderBottomWidth: 2,
-        paddingBottom: 15
-
-    },
-    ListItems: {
-        height: '80%',
+    cartView: {
         flexDirection: "row",
-        marginHorizontal: 16,
-
+        padding: 8,
+        backgroundColor: 'lightslategrey',
+        margin: 16,
+        borderRadius: 4
     },
-    Item: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        borderBottomWidth: 0.5,
-        paddingBottom: 5,
-        paddingTop: 5
+    cartIcon: {top: 5, right: 5, marginStart: 4},
+    itemText: {
+        marginStart: 10,
+        fontSize: 16,
+        fontWeight: "bold",
+        color: 'white'
     },
-    StatusBar: {
-        height: "100%",
-        backgroundColor: 'red',
-        padding: 15
+    priceText: {
+        marginStart: 10,
+        fontSize: 16,
+        fontWeight: "bold",
+        color: 'white'
     }
-
 });
