@@ -1,5 +1,6 @@
 import React from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Icon} from 'react-native-elements'
 
 import ProductItem from "./ProductItem";
 
@@ -16,7 +17,7 @@ export default class ProductListScreen extends React.Component {
             this.setState({
                 fromFetch: true,
                 loading: true,
-                listEnded: false,
+                listEnded: false
             })
 
             fetch("https://fakestoreapi.com/products?offset=" + this.state.offset)
@@ -37,7 +38,6 @@ export default class ProductListScreen extends React.Component {
                             listEnded: this.state.offset === 5//TODO this is dummy condition for pagination
                         })
                     }, 10)
-
                 })
                 .catch(error => console.log(error))
         } else {
@@ -48,23 +48,18 @@ export default class ProductListScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             dataSource: [],
-            offset: 1
+            offset: 1,
+            totalItem: 0,
+            totalPrice: 0
         };
     }
 
     componentDidMount() {
-
         this.goForFetch();
     }
 
-
-
-
-    getBasketItems() {
-        return this.state.products.filter(item => item.count);
-    }
 
     handlePressFavorite(selectedItem) {
         console.log("handlePressFavorite");
@@ -88,21 +83,24 @@ export default class ProductListScreen extends React.Component {
         } else if (selectedItem.count !== 0) {
             selectedItem.count--;
         }
-        // this.state.products.forEach((item) => {
-        //
-        //     if (selectedItem.id === item.id) {
-        //         if (type === "inc") {
-        //             item.count++;
-        //         } else if (item.count !== 0) {
-        //             item.count--;
-        //         }
-        //     }
-        //
-        // });
-
         this.setState({dataSource: this.state.dataSource});
+        this.updateCartData()
     }
 
+    updateCartData() {
+        let items = 0;
+        let prices = 0;
+
+        this.state.dataSource.filter(product => product.count != 0).map(filteredProduct => {
+            items = items + filteredProduct.count;
+            prices = prices + (filteredProduct.count * filteredProduct.price);
+        });
+
+        this.setState({
+            totalItem: items,
+            totalPrice: prices,
+        })
+    }
 
     render() {
         const {dataSource, loading} = this.state
@@ -110,22 +108,67 @@ export default class ProductListScreen extends React.Component {
         return (
             <View style={styles.container}>
 
-                <FlatList
-                    data={dataSource}
-                    renderItem={({item, index}) => <ProductItem product={item}
-                                                                onPressFavorite={() => this.handlePressFavorite(item)}
-                                                                onPressAdd={() => this.handlePressAdd(item, index)}
-                                                                onPressRemove={() => this.handlePressRemove(item, index)}/>}
-                    keyExtractor={(item, index) => index.toString()}
-                    onEndReached={this.goForFetch}
-                    onEndReachedThreshold={1}
-                />
-
-                {loading &&
-                <View>
-                    <ActivityIndicator size="large" color="#0c9"/>
-                </View>
+                {
+                    this.state.dataSource.length > 0 ?
+                        <FlatList
+                            data={dataSource}
+                            renderItem={({item, index}) => <ProductItem product={item}
+                                                                        onPressFavorite={() => this.handlePressFavorite(item)}
+                                                                        onPressAdd={() => this.handlePressAdd(item, index)}
+                                                                        onPressRemove={() => this.handlePressRemove(item, index)}/>}
+                            keyExtractor={(item, index) => index.toString()}
+                            onEndReached={this.goForFetch}
+                            onEndReachedThreshold={0.5}
+                        />
+                        : null
                 }
+
+                {loading ?
+                    <View style={{
+                        backgroundColor: '#00000000'
+                    }}>
+                    <ActivityIndicator size="large" color="#0c9"/>
+                    </View> : null
+                }
+
+
+                {this.state.totalItem !== 0 ? <View
+                    style={{
+                        flexDirection: "row",
+                        padding: 8,
+                        backgroundColor: 'lightslategrey',
+                        margin: 16,
+                        borderRadius: 4
+                    }}
+                >
+                    <Icon
+                        style={{top: 5, right: 5, marginStart: 4}}
+                        name='cart-plus'
+                        type='font-awesome'
+                        size={28}
+                        color='#FFF'
+                    />
+                    <View
+                        style={{
+                            flex: 1,
+                            paddingStart: 8,
+                        }}
+                    >
+
+                        <Text style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: 'white'
+                        }}>{this.state.totalItem} Items</Text>
+                        <Text style={{
+                            fontSize: 14,
+                            color: 'white'
+                        }}>Total : ₹{this.state.totalPrice.toFixed(2)}</Text>
+                    </View>
+                </View> : null}
+
+
+
             </View>
         )
     }
@@ -135,7 +178,7 @@ export default class ProductListScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+        flexDirection: "column",
     },
     title: {
         textAlign: 'center',

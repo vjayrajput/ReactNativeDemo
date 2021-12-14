@@ -41,7 +41,7 @@ export default class ProductItem extends React.Component {
                     }}>{product.title}</Text>
                     <Text style={{
                         fontSize: 14,
-                    }}>${product.price}</Text>
+                    }}>₹{product.price}</Text>
                     <Text style={{
                         fontSize: 12,
                     }}>{product.description}</Text>
@@ -58,7 +58,7 @@ export default class ProductItem extends React.Component {
 
 
             {product.count === 0 ?
-                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <View style={{width: 100, backgroundColor: 'blue'}}>
                     <Button title='ADD'
                             style={{fontSize: 18}}
                             color='green'
@@ -66,8 +66,8 @@ export default class ProductItem extends React.Component {
                             onPress={() => this.props.onPressAdd()}/>
                 </View>
                 :
-                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                    
+                <View style={{flexDirection: 'row'}}>
+
                     <Icon
                         style={{position: 'absolute', top: 5, right: 5, marginStart: 4}}
                         name={product.count === 10 ? 'plus-square-o' : 'plus-square'}
